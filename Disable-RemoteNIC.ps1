@@ -3,7 +3,7 @@
 ###############################################################################################################
 # Language     :  PowerShell 5.0
 # Filename     :  Disable-RemoteNIC.ps1 
-# Author        :  Brendan Chamberlain
+# Author       :  infosecB
 # Description  :  Disables all NICs on a specified remote device.
 # Repository   :  N/A
 ###############################################################################################################
