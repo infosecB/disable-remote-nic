@@ -31,15 +31,20 @@ Function Disable-RemoteNIC {
         [Parameter(Mandatory = $True, Position = 0, HelpMessage = "Enter the computer name you would like to disconnect from the network.")]
         [string]$ComputerName
     )
+    Begin {
+
+        $Session = New-PSSession -ComputerName $ComputerName -Credential $Credential -ErrorAction Stop
+        $OSVersion = Invoke-Command -Session $Session -ScriptBlock { [System.Environment]::OSVersion.Version.Major } -ErrorAction Stop
+        
+    }
     Process {
         Try {
 
-            $Session = New-PSSession -ComputerName $ComputerName -Credential $Credential -ErrorAction Stop
-            $OSVersion = Invoke-Command -Session $Session -ScriptBlock {[System.Environment]::OSVersion.Version.Major} -ErrorAction Stop
+            
 
             If ($OSVersion -eq 10) {
 
-                Invoke-Command -Session $Session -ScriptBlock {Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | Disable-NetAdapter} -ErrorAction Stop
+                Invoke-Command -Session $Session -ScriptBlock { Get-NetAdapter | Where-Object { $_.Status -eq 'Up' } | Disable-NetAdapter } -ErrorAction Stop
     
             }
             Else {
@@ -55,7 +60,7 @@ Function Disable-RemoteNIC {
             Break
         }
 
-        Get-PSSession | Where-Object {$_.ComputerName -eq $ComputerName} | Remove-PSSession
+        Get-PSSession | Where-Object { $_.ComputerName -eq $ComputerName } | Remove-PSSession
 
     }
 }
