@@ -35,7 +35,7 @@ Function Disable-RemoteNIC {
 
         $Session = New-PSSession -ComputerName $ComputerName -Credential $Credential -ErrorAction Stop
         $OSVersion = Invoke-Command -Session $Session -ScriptBlock { [System.Environment]::OSVersion.Version.Major } -ErrorAction Stop
-        
+
     }
     Process {
         Try {
@@ -59,7 +59,10 @@ Function Disable-RemoteNIC {
             Write-Host -ForegroundColor Red "The following error occured:" $Error[0].Exception.TransportMessage
             Break
         }
+    }
 
+    End {
+        
         Get-PSSession | Where-Object { $_.ComputerName -eq $ComputerName } | Remove-PSSession
 
     }
